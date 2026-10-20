@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+# Generated certificates. The directory itself is kept: Podman, unlike Docker,
+# will not create a missing bind-mount source.
+.certs/*
+!.certs/.gitkeep
+.vscode/
+.idea/

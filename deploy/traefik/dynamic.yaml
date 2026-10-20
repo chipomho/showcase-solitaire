@@ -1,0 +1,35 @@
+http:
+  routers:
+    # Plain HTTP only ever redirects. An entry point redirect would always send people to
+    # port 443; this one uses the port HTTPS is actually published on (SHOWCASES_HTTPS_PORT).
+    http-to-https:
+      rule: PathPrefix(`/`)
+      entryPoints: [web]
+      middlewares: [redirect-to-https]
+      service: noop@internal
+
+    solitaire:
+      rule: Host(`solitaire.showcases.chipomho.local`)
+      entryPoints: [websecure]
+      service: solitaire
+      tls: {}
+
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        port: '{{ env "SHOWCASES_HTTPS_PORT" | default "443" }}'
+        permanent: true
+
+  services:
+    solitaire:
+      loadBalancer:
+        servers:
+          - url: http://web:8080
+
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/showcases.crt
+        keyFile: /certs/showcases.key

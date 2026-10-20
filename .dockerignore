@@ -1,0 +1,11 @@
+.git
+.certs
+.idea
+.vscode
+node_modules
+dist
+coverage
+deploy/certs
+deploy/traefik
+compose.yaml
+README.md

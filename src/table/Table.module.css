@@ -1,0 +1,244 @@
+.table {
+  --gap: clamp(5px, 1.8vw, 18px);
+  --card-w: clamp(34px, calc((min(100vw, 900px) - 32px - 6 * var(--gap)) / 7), 108px);
+  --card-h: calc(var(--card-w) * 1.4);
+  --card-radius: calc(var(--card-w) * 0.075);
+  --fan-down: calc(var(--card-h) * 0.09);
+  --fan-up: calc(var(--card-h) * 0.25);
+
+  display: grid;
+  justify-content: center;
+  gap: calc(var(--gap) * 1.8);
+  padding-block: 4px 24px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.upper,
+.tableau {
+  display: grid;
+  grid-template-columns: repeat(7, var(--card-w));
+  gap: var(--gap);
+}
+
+.foundations {
+  grid-column: 4 / span 4;
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+.tableau {
+  min-height: calc(var(--card-h) * 3.6);
+}
+
+/* Piles */
+
+.stack,
+.column {
+  position: relative;
+  border-radius: var(--card-radius);
+  transition: outline-color 120ms ease;
+  outline: 2px dashed transparent;
+  outline-offset: 4px;
+}
+
+.stack {
+  width: var(--card-w);
+  height: var(--card-h);
+}
+
+/* Squared up: everything in a stack sits on the same spot. `.stack > .card` outranks the
+   `.card` rule further down, which would otherwise put the cards back into normal flow. */
+.stack > *,
+.stack > .card {
+  position: absolute;
+  inset: 0;
+}
+
+/* The outline of an empty place, drawn under every pile. */
+.stack::before,
+.column::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.stack[data-drop-hover],
+.column[data-drop-hover] {
+  outline-color: var(--accent);
+}
+
+.stack[data-drop-hover]::before,
+.column[data-drop-hover]::before {
+  border-color: var(--accent);
+  background: rgba(242, 193, 78, 0.16);
+}
+
+.fan {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fan > li {
+  position: relative;
+}
+
+.fan > li[data-face='down'] + li {
+  margin-top: calc(var(--fan-down) - var(--card-h));
+}
+
+.fan > li[data-face='up'] + li {
+  margin-top: calc(var(--fan-up) - var(--card-h));
+}
+
+/* Cards */
+
+.card {
+  container: card / inline-size;
+  position: relative;
+  display: block;
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.3),
+    0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.card {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: grab;
+  /* Without this a touch drag scrolls the page instead of moving the card. */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+button.card:hover {
+  box-shadow:
+    0 0 0 2px rgba(242, 193, 78, 0.45),
+    0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card[data-lifted] {
+  opacity: 0;
+  cursor: grabbing;
+}
+
+.card[data-held] {
+  transform: translateY(calc(var(--card-h) * -0.05));
+  box-shadow:
+    0 0 0 3px var(--accent),
+    0 12px 20px rgba(0, 0, 0, 0.35);
+}
+
+button.card:focus-visible,
+.emptyPile:focus-visible,
+.stock:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.emptyPile {
+  display: block;
+  width: var(--card-w);
+  height: var(--card-h);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--card-radius);
+  background: transparent;
+  cursor: pointer;
+}
+
+.foundations .emptyPile::after {
+  content: '';
+  position: absolute;
+  inset: 30% 22%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Stock */
+
+.stock {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--card-radius);
+  background: none;
+  cursor: pointer;
+}
+
+.stock > .card {
+  box-shadow:
+    1px 1px 0 rgba(0, 0, 0, 0.25),
+    2px 2px 0 #fdfbf4,
+    3px 3px 0 rgba(0, 0, 0, 0.25),
+    4px 4px 0 #fdfbf4,
+    5px 5px 0 rgba(0, 0, 0, 0.2),
+    0 8px 14px rgba(0, 0, 0, 0.3);
+}
+
+.recycle {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: calc(var(--card-w) * 0.5);
+}
+
+.stock:hover .recycle {
+  color: var(--accent);
+}
+
+/* Drag preview */
+
+.preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.preview .fan {
+  rotate: 2deg;
+  transform-origin: 30% 10%;
+}
+
+.preview .card {
+  box-shadow:
+    0 16px 30px rgba(0, 0, 0, 0.45),
+    0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack,
+  .column,
+  button.card {
+    transition: none;
+  }
+
+  .preview .fan {
+    rotate: none;
+  }
+}

@@ -1,0 +1,22 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+    http:
+      tls: {}
+
+# Routes live in a file rather than container labels, so Traefik needs no access to the
+# Docker or Podman socket. The HTTP-to-HTTPS redirect is in there too (see dynamic.yaml).
+providers:
+  file:
+    filename: /etc/traefik/dynamic.yaml
+
+log:
+  level: INFO
+
+accessLog: {}

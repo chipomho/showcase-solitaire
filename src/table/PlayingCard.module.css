@@ -1,0 +1,159 @@
+/*
+ * Card artwork. The element wrapping a card is a size container, so every measurement
+ * here is in cqi (percent of the card's width) and the whole card scales as one piece.
+ */
+
+.face,
+.back {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+}
+
+.face {
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 30% 10%, #ffffff 0%, transparent 60%),
+    linear-gradient(165deg, #fffdf6 0%, #f4efe1 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: var(--card-ink-black);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  line-height: 1;
+}
+
+.red {
+  color: var(--card-ink-red);
+}
+
+.black {
+  color: var(--card-ink-black);
+}
+
+.corner {
+  position: absolute;
+  top: 5cqi;
+  left: 5cqi;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 15cqi;
+  font-size: 19cqi;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+.cornerSuit {
+  margin-top: 1cqi;
+  font-size: 16cqi;
+}
+
+.cornerBottom {
+  top: auto;
+  left: auto;
+  right: 5cqi;
+  bottom: 5cqi;
+  transform: rotate(180deg);
+}
+
+.pips {
+  position: absolute;
+  inset: 28cqi 31cqi;
+}
+
+.pip {
+  position: absolute;
+  font-size: 20cqi;
+  transform: translate(-50%, -50%);
+}
+
+.pip.inverted {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.ace {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 58cqi;
+}
+
+.court {
+  position: absolute;
+  inset: 24cqi 22cqi;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2cqi;
+  border-radius: 4cqi;
+  background:
+    repeating-linear-gradient(135deg, rgba(196, 154, 60, 0.18) 0 2cqi, transparent 2cqi 4cqi),
+    linear-gradient(180deg, #fbf3dc, #f1e2b8);
+  box-shadow:
+    inset 0 0 0 0.8cqi currentColor,
+    inset 0 0 0 2.4cqi #fbf3dc,
+    inset 0 0 0 3cqi rgba(196, 154, 60, 0.7);
+}
+
+.courtLetter {
+  font-size: 34cqi;
+  font-weight: 700;
+}
+
+.courtSuit {
+  font-size: 22cqi;
+}
+
+/* Only shown on small cards, where pips and court panels would be noise. */
+.compactSuit {
+  display: none;
+  position: absolute;
+  right: 8cqi;
+  bottom: 10cqi;
+  font-size: 44cqi;
+}
+
+@container card (max-width: 62px) {
+  .pips,
+  .ace,
+  .court,
+  .cornerBottom {
+    display: none;
+  }
+
+  .compactSuit {
+    display: block;
+  }
+
+  .corner {
+    top: 6cqi;
+    left: 7cqi;
+    font-size: 30cqi;
+  }
+
+  .cornerSuit {
+    font-size: 26cqi;
+  }
+}
+
+.back {
+  background: #fdfbf4;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22);
+}
+
+.back::before {
+  content: '';
+  position: absolute;
+  inset: 6cqi;
+  border-radius: 5cqi;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.13) 0 1.5cqi, transparent 1.5cqi 7cqi),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.13) 0 1.5cqi, transparent 1.5cqi 7cqi),
+    radial-gradient(circle at 50% 45%, var(--card-back-light), var(--card-back-dark) 75%);
+  box-shadow:
+    inset 0 0 0 1.2cqi rgba(255, 255, 255, 0.55),
+    inset 0 0 0 2.6cqi var(--card-back-dark);
+}
